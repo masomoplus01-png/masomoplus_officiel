@@ -2,5 +2,8 @@ from django.db import connection
 
 connection.ensure_connection()
 with connection.cursor() as cursor:
-    cursor.execute("SELECT version();")
+    if connection.vendor == "sqlite":
+        cursor.execute("SELECT sqlite_version();")
+    else:
+        cursor.execute("SELECT version();")
     print(cursor.fetchone()[0])
